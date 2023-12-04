@@ -1,0 +1,38 @@
+* {    
+    font-size: 24px;
+    font-family: 'Inter';
+    margin: 0;
+}
+
+section{
+    box-sizing: border-box;
+    margin: 5rem auto;
+}
+
+button {
+    background-color: black;
+    color: white;
+    font-size: 24px;
+    border-radius: 20px;
+    padding: 4px 16px;
+    border: none;
+    cursor: pointer;
+
+}
+
+input {
+    font-size: 20px;
+    cursor: pointer;
+
+}
+
+input[type="number"] {
+    padding: 6px;
+    border-radius: 6px;
+}
+
+
+hr {
+    max-width: 1000px;
+}
+

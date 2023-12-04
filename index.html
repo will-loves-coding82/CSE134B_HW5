@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html  lang="en">
+
+<head>
+    <title>CSE134B HW5</title>
+    <meta charset="UTF-8">
+    <script type="module" src="./ratingWidget.js"></script>
+    <script type="module" src="./weatherWidget.js"></script>
+
+    <link rel="stylesheet" href="./index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+<body>
+
+    <section>
+
+        <rating-widget>
+            <!--Form slotted within WC for fallback in case js doesn't work-->
+            <form action = "https://httpbin.org/post" method = "POST" slot="form">
+
+                <label for="rating"> How satisfied are you?</label>
+                <input type="hidden" name="question" value="How satisfied are you?">
+                <input type="hidden" name="sentBy" value="HTML">
+                <input type="number" id ="rating" name="rating" min="0" max="8" value = "0" required>
+
+                <button type="submit">Submit</button>
+            </form>
+        </rating-widget>
+    </section>  
+
+    <br>
+    <br>
+    <section>
+
+        <weather-widget></weather-widget>
+    </section>
+
+</body>
+
+</html>
+
