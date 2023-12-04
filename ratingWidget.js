@@ -247,14 +247,14 @@ class RatingWidget extends HTMLElement {
     updateMessage() {
         const ratio = this.selectedNumStars / this.max;
         if (ratio <= 0.5) {
-            this.feedback.textContent= `Thanks for your feedback of ${this.selectedNumStars}. We'll try to do better`
+            this.feedback.textContent= `Thanks for your ${this.selectedNumStars} star rating. We'll try to do better`
         }
 
         if (ratio > 0.5  && ratio < 0.8) {
-            this.feedback.textContent= `Thanks for your feedback of ${this.selectedNumStars}. We're glad you are satisfactory`
+            this.feedback.textContent= `Thanks for your ${this.selectedNumStars} star rating. We're glad you are satisfactory`
         }
         if (ratio >= 0.8) {
-            this.feedback.textContent= `Thanks for your feedback of ${this.selectedNumStars}. We appreciate your awesome rating!`
+            this.feedback.textContent= `Thanks for your awesome ${this.selectedNumStars} star rating!!`
 
         }
 

@@ -7,7 +7,6 @@ class WeatherWidget extends HTMLElement {
 
         this.weatherDisplay = document.createElement('div');
 
-   
         this.weatherDisplay.innerHTML = `
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -37,12 +36,8 @@ class WeatherWidget extends HTMLElement {
             <p id = "windSpeed"></p>
         <section>
 
-     
-
         <section id = "weeklyForecastGrid"></section>
-        
         `
-
 
         this.shadowStyle = document.createElement("style");
         this.shadowStyle.textContent = `
@@ -55,13 +50,11 @@ class WeatherWidget extends HTMLElement {
                 padding: 2rem;
                 border-radius: 20px;
                 box-shadow: 1px 1px 5px lightgrey;
-
             }
 
             div * {
                 margin: 0;
             }
-
 
             section#weatherCardHeader {
                 display: flex;
@@ -82,8 +75,7 @@ class WeatherWidget extends HTMLElement {
             progress {
                 width: 120px;
                 position: relative;
-                -webkit-appearance: none;
-                
+                -webkit-appearance: none;     
             }
 
             progress::-webkit-progress-bar {
@@ -125,7 +117,6 @@ class WeatherWidget extends HTMLElement {
                 'opsz' 24
             }
 
-
             #weeklyForecastGrid {
                 display: flex;
                 flex-direction: row;
@@ -146,7 +137,6 @@ class WeatherWidget extends HTMLElement {
 
                 & p#degrees {
                     padding-left: 8px;
-
                 }
 
                 & .material-symbols-outlined {
@@ -154,15 +144,8 @@ class WeatherWidget extends HTMLElement {
                     color: grey;
                     font-variation-settings:
                     'FILL' 1;
-
-                }
-
-
-                
-            }
-
-
-         
+                }        
+            } 
         `
         this.shadowRoot.appendChild(this.weatherDisplay);
         this.shadowRoot.appendChild(this.shadowStyle);
@@ -174,8 +157,6 @@ class WeatherWidget extends HTMLElement {
         this.humidityText = this.shadowRoot.querySelector('#humidityText');
 
         this.weeklyForecastGrid = this.shadowRoot.querySelector('#weeklyForecastGrid');
-
-
     }
 
     connectedCallback() {
@@ -211,10 +192,7 @@ class WeatherWidget extends HTMLElement {
         .catch(error => {
             console.error('Fetch error:', error);
         });
-
     }
-
-
 
     updateContent(data) {
 
@@ -259,18 +237,11 @@ class WeatherWidget extends HTMLElement {
 
                         <p id = "degrees">${day.temperature}°</p>
                         
-                    </span>
-                
+                    </span> 
                 `
                 this.weeklyForecastGrid.appendChild(weekForecastCard)
-
             }
-
         })
-
-        
-
-       
     }
 }
 
