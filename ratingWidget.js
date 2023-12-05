@@ -9,13 +9,14 @@ class RatingWidget extends HTMLElement {
 
         this.shadowRoot.innerHTML =     `
             <style> 
+                @import './variables.css';
 
                 #jsFormContainer {
                     max-width: 800px;
                     margin: auto;
                     font-family: var(--font-family-base);
                     text-align: center;
-                    
+                    color: inherit;
                 }
 
                 button {
@@ -36,13 +37,24 @@ class RatingWidget extends HTMLElement {
                     margin: 0;
                 }
 
-                span.star {
+                .star {
                     font-size: 56px;
                     cursor: pointer;
-                    color: darkgrey;
                     margin: 0 12px;
+                    color: var(--star-default);
                     transition: color 0.08s ease-in;
-                    
+                }
+
+                .default {
+                    color: var(--star-default);
+                }
+
+                .selected {
+                   color: var(--star-focused);
+                }
+
+                .hovered {
+                    color: var(--star-hovered);
                 }
 
                 #ratingFeedback {
@@ -76,6 +88,7 @@ class RatingWidget extends HTMLElement {
 
     connectedCallback() {
 
+        this.document = document.documentElement;
 
         this.$form = this.querySelector("form");
         this.rateInput = this.querySelector("#rating");
@@ -160,20 +173,19 @@ class RatingWidget extends HTMLElement {
 
                 // Send the request
                 xhr.send(formData);
-
-
-
         
             })
         }  
     }
 
 
+    // Adds hover color
     addHighlight(index) {
         if (this.selectedNumStars == 0) {
             this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
                 if (i >= 0 && i <= index ) {
-                    star.style.color = "rgb(13,13,13)"
+                    star.classList.add('hovered')
+
                 }
             })
 
@@ -182,29 +194,31 @@ class RatingWidget extends HTMLElement {
     }
 
       
-
+    // When mouse moves out of focus, remove hover color
     removeHighlight(index) {
 
         if (this.selectedNumStars > 0) {
             return;
         }
+
         if (this.selectedNumStars == 0) {
             this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
                 if (i >= 0 && i <= index ) {
-                    star.style.color = "darkgrey"
+                    star.classList.remove('selected')
+                    star.classList.remove('hovered')
                 } 
             })
         }
     }
 
 
+    // When use clicks on a star
     selectRating(index) {
 
-
-        // Highlight stars if we haven't clicked any yet
+        // if we previously selected a star
         if (this.selectedNumStars > 0 ) {
 
-            // reset all stars if we toggle the previously selected star
+            // reset all stars if we toggle the previously selected star index
             if (index  == this.selectedNumStars - 1) {
                 this.selectedNumStars = 0;
                 this.rateInput.setAttribute("value", this.selectedNumStars.toString());
@@ -212,7 +226,9 @@ class RatingWidget extends HTMLElement {
                 console.log(this.rateInput.getAttribute("value"))
                 this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
                     if (i >= 0 && i <= index ) {
-                        star.style.color = "darkgrey"
+                        star.classList.remove('selected')
+                        star.classList.add('default')
+
                     }
                 })
 
@@ -230,7 +246,10 @@ class RatingWidget extends HTMLElement {
             console.log(this.rateInput.getAttribute("value"))
             this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
                 if (i >= 0 && i <= index ) {
-                    star.style.color = "orange"
+                    star.classList.remove('hovered')
+
+                    star.classList.add('selected')
+
                 }
             })
 

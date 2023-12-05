@@ -1,9 +1,13 @@
 :root {
 
-    --font-family-base: 'Nunito';
-    --font-size1: 20px;
+    --font-family-base: 'Inter';
+    --font-size: 24px;
 
     --light-grey: rgb(204, 204, 204);
+
+    --star-default: rgb(204, 204, 204);
+    --star-hovered: rgb(75, 75, 75) ;
+    --star-focused: rgb(255, 187, 0); 
 
 }
 
