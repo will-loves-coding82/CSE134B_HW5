@@ -6,9 +6,12 @@
     margin: 0;
 }
 
+
+
 section{
     box-sizing: border-box;
     margin: 5rem auto;
+    
 }
 
 button {

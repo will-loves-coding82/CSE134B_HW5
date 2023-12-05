@@ -147,6 +147,7 @@ class RatingWidget extends HTMLElement {
                 let xhr = new XMLHttpRequest();
 
                 let formData = new FormData(this.$form);
+                formData.set("sentBy", "JS")
                 console.log(this.$form)
 
                 console.log(formData)

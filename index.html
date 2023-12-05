@@ -4,8 +4,8 @@
 <head>
     <title>CSE134B HW5</title>
     <meta charset="UTF-8">
-    <script type="module" src="./ratingWidget.js"></script>
-    <script type="module" src="./weatherWidget.js"></script>
+    <script type="module" src="./scripts/ratingWidget.js"></script>
+    <script type="module" src="./scripts/weatherWidget.js"></script>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="./variables.css" type = 'text/css'>
 
@@ -38,7 +38,9 @@
     <br>
     <section>
 
-        <weather-widget></weather-widget>
+        <weather-widget>
+            <p slot = "noWeather">Current Weather Conditions Unavailable</p>
+        </weather-widget>
     </section>
 
 </body>

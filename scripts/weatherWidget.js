@@ -9,12 +9,10 @@ class WeatherWidget extends HTMLElement {
 
         this.weatherDisplay.innerHTML = `
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
         <section id = "weatherCardHeader">
+            <slot name = "noJS"></slot>
             <span id = "weaterTitleBox">
-                <span class="material-symbols-outlined">cloud</span>
-
+                <img id = "currentWeatherIcon" alt = "today's weather icon">
                 <div >
                     <h2>San Diego</h2>
                     <date></date>
@@ -70,6 +68,14 @@ class WeatherWidget extends HTMLElement {
                 & h2, date{
                     margin: 0 20px 0 20px;
                 }
+
+                & img#currentWeatherIcon {
+                    width: 24px;
+                    height: 24px;
+                    background: rgb(150, 190, 250);
+                    padding: 12px;
+                    border-radius: 8px;
+                }
             }
 
             progress {
@@ -79,13 +85,14 @@ class WeatherWidget extends HTMLElement {
             }
 
             progress::-webkit-progress-bar {
-                background-color: lightgreen;
+                background-color:rgb(200, 220, 0);
                 height: 10px;
                 border-radius: 20px
             }
 
             progress::-webkit-progress-value {
                 border-radius: 20px;
+                background-color:  rgb(150, 200, 0);
             }
 
             #humidityText {
@@ -103,20 +110,6 @@ class WeatherWidget extends HTMLElement {
                 color: grey;
             }
 
-            #weaterTitleBox .material-symbols-outlined {
-                background-color: rgb(100, 190, 220);
-                padding: 12px;
-                border-radius: 10px;
-                height: 24px;
-
-                margin-top: 4px;
-                font-variation-settings:
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 24
-            }
-
             #weeklyForecastGrid {
                 display: flex;
                 flex-direction: row;
@@ -131,6 +124,12 @@ class WeatherWidget extends HTMLElement {
                 text-align: center;
                 justify-content: center;
 
+                & img#weeklyWeatherIcon {
+                    width: 24px;
+                    height: 24px;
+                    padding: 12px;
+                }
+
                 & p#weekDayName{
                     color: grey;
                 }
@@ -139,16 +138,13 @@ class WeatherWidget extends HTMLElement {
                     padding-left: 8px;
                 }
 
-                & .material-symbols-outlined {
-                    margin-top: 0.5rem;
-                    color: grey;
-                    font-variation-settings:
-                    'FILL' 1;
-                }        
+                    
             } 
         `
         this.shadowRoot.appendChild(this.weatherDisplay);
         this.shadowRoot.appendChild(this.shadowStyle);
+        
+        this.currentWeatherIcon = this.shadowRoot.querySelector('#currentWeatherIcon');
 
         this.degrees = this.shadowRoot.querySelector('#currentDegrees');
         this.shortForecast = this.shadowRoot.querySelector('#currentShortForecast');
@@ -212,10 +208,15 @@ class WeatherWidget extends HTMLElement {
         const formattedDate = currentDate.toLocaleDateString('en-US', options);
         this.date.textContent = formattedDate;
 
+        
 
         // periods is an array of forecasts over a 7 day period
         const weeklyForecast = Array.from(data["periods"]);
         const currentForecast = Array.from(data["periods"])[0];
+
+        // choose an icon for today's weather
+        const currentWeatherIcon = this.renderIcon(currentForecast["detailedForecast"]);
+        this.currentWeatherIcon.setAttribute("src", currentWeatherIcon);
 
         this.degrees.textContent = `${currentForecast["temperature"]}° F`
         this.shortForecast.textContent = `${currentForecast["shortForecast"]}`
@@ -223,17 +224,20 @@ class WeatherWidget extends HTMLElement {
         this.humidityBar.setAttribute("value", currentForecast["relativeHumidity"]["value"])
         this.humidityText.textContent = `Humidity: ${currentForecast["relativeHumidity"]["value"]}%`;
 
+
+
         // Create the weekly forecast for this week
         weeklyForecast.forEach((day, index) => {
 
             if (index % 2 == 0 && index != 0) {
 
                 const weekForecastCard = document.createElement('span');
+                const weeklyWeatherIcon = this.renderIcon(day["detailedForecast"]);
+                console.log(day["detailedForecast"])
                 weekForecastCard.innerHTML = `
                     <span id = "weekDayForecastCard">
-                        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
                         <p id = "weekDayName">${dayNameMapping[day.name]}</p>
-                        <span class="material-symbols-outlined">cloud</span>
+                        <img id = "weeklyWeatherIcon" src = ${weeklyWeatherIcon} alt = "icon of weather condition">
 
                         <p id = "degrees">${day.temperature}°</p>
                         
@@ -242,6 +246,36 @@ class WeatherWidget extends HTMLElement {
                 this.weeklyForecastGrid.appendChild(weekForecastCard)
             }
         })
+    }
+
+
+    // Chooses an appropriate icon based on weather description
+    renderIcon(weather) {
+        
+        console.log(weather)
+        let weatherIcon = "./icons/cloudy.png";
+
+
+        if(weather.toLowerCase().includes("sunny") || weather.toLowerCase().includes("mostly sunny")) {
+            weatherIcon = "./icons/sunny.png";
+        }
+        
+        if (weather.toLowerCase().includes("partly sunny") || (weather.toLowerCase().includes("partly cloudy"))) {
+            weatherIcon = "./icons/partly-cloudy.png";
+        }
+        if (weather.toLowerCase().includes("cloudy")) {
+            weatherIcon = "./icons/cloudy.png";
+        }
+        if (weather.toLowerCase().includes("rainy")) {
+            weatherIcon = "./icons/rainy.png";
+        }
+        if (weather.toLowerCase().includes("fog")) {
+            weatherIcon = "./icons/foggy.png";
+        }
+
+        return weatherIcon;
+
+       
     }
 }
 
