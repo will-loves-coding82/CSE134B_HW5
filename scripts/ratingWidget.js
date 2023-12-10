@@ -66,11 +66,23 @@ class RatingWidget extends HTMLElement {
 
                 }
 
+                dialog {
+                    border: none;
+                    box-shadow: 1px 1px 5px grey;
+                    border-radius: 20px;
+                }
+
 
 
                 
             </style>
-            <div id = "jsFormContainer">
+                <div id = "jsFormContainer" >
+                <dialog id = "submitDialog">
+
+                    <p>Successfully submitted feedback</p>
+                    <button autofocus>ok</button>
+                </dialog>
+
                 <slot name = "form">default</slot>
 
                 <h2>Rating Widget</h2>
@@ -98,6 +110,10 @@ class RatingWidget extends HTMLElement {
 
         this.submitButton = this.shadowRoot.querySelector("#jsFormSubmit");
         this.feedback =this.shadowRoot.querySelector("#ratingFeedback");
+
+        this.dialog =this.shadowRoot.querySelector("#submitDialog");
+        this.dialogText =this.shadowRoot.querySelector("dialog p");
+        this.closeDialog =this.shadowRoot.querySelector("dialog button");
 
 
         if(this.rateInput) {
@@ -141,9 +157,20 @@ class RatingWidget extends HTMLElement {
                 } )
             }
 
+            this.closeDialog.addEventListener("click", event => {
+                this.dialog.close();
+            })
+
+
             this.submitButton.addEventListener('click', e => {
                 
                 // e.preventDefault();
+                if(this.rateInput.getAttribute("value") == "0" ) {
+                    e.preventDefault();
+                    this.dialogText.textContent = "Please add a rating before submitting"
+                    this.dialog.showModal();
+                    return;
+                }
                 let xhr = new XMLHttpRequest();
 
                 let formData = new FormData(this.$form);
@@ -156,11 +183,14 @@ class RatingWidget extends HTMLElement {
                 xhr.open('POST', 'https://httpbin.org/post', true);
                 xhr.setRequestHeader('X-Sent-By', 'JavaScript');
 
+                const resetWidget = this.resetWidget.bind(this);
+
                 // Set up a function to handle the response
                 xhr.onload = function() {
                     if (xhr.status === 200) {
                         // On success, display the response
                         console.log('Success:', xhr.responseText);
+                        resetWidget();
 
                     } else {
                         console.error('Error:', xhr.statusText);
@@ -174,9 +204,21 @@ class RatingWidget extends HTMLElement {
 
                 // Send the request
                 xhr.send(formData);
-        
             })
         }  
+    }
+
+
+    resetWidget() {
+           // clear widget content and show dialog to confirm
+           this.clearMessage();
+           this.removeAllHighlights();
+           this.dialogText.textContent = `Successfully submitted ${this.selectedNumStars} stars!`
+           this.dialog.showModal();
+       
+           this.selectedNumStars = 0;
+           this.rateInput.setAttribute("value", "0");
+
     }
 
 
@@ -192,6 +234,14 @@ class RatingWidget extends HTMLElement {
 
         }
        
+    }
+
+    removeAllHighlights() {
+        this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
+            if (i >= 0 && i <= 8 ) {
+                star.classList.remove('selected')
+            } 
+        })
     }
 
       
@@ -227,8 +277,7 @@ class RatingWidget extends HTMLElement {
                 console.log(this.rateInput.getAttribute("value"))
                 this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
                     if (i >= 0 && i <= index ) {
-                        star.classList.remove('selected')
-                        star.classList.add('default')
+                        star.classList.replace('selected', 'default')
 
                     }
                 })
@@ -247,10 +296,7 @@ class RatingWidget extends HTMLElement {
             console.log(this.rateInput.getAttribute("value"))
             this.shadowRoot.querySelectorAll("span.star").forEach((star, i) => {
                 if (i >= 0 && i <= index ) {
-                    star.classList.remove('hovered')
-
-                    star.classList.add('selected')
-
+                    star.classList.replace('hovered', 'selected')
                 }
             })
 
