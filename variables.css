@@ -3,11 +3,14 @@
     --font-family-base: 'Inter';
     --font-size: 24px;
 
+}
+
+
+#ratingWidget {
     --light-grey: rgb(204, 204, 204);
 
     --star-default: rgb(204, 204, 204);
     --star-hovered: rgb(75, 75, 75) ;
     --star-focused: rgb(255, 187, 0); 
-
 }
 

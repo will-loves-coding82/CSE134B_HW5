@@ -7,6 +7,30 @@ class WeatherWidget extends HTMLElement {
 
         this.weatherDisplay = document.createElement('div');
 
+
+        this.days = [
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+        ];
+
+        this.dayNameMapping = {
+            'Sunday': 'Sun',
+            'Monday': 'Mon',
+            'Tuesday': 'Tue',
+            'Wednesday': 'Wed',
+            'Thursday': 'Thu',
+            'Friday': 'Fri',
+            'Saturday': 'Sat'
+        };
+
+
+
+
         this.weatherDisplay.innerHTML = `
 
         <section id = "weatherCardHeader">
@@ -136,9 +160,7 @@ class WeatherWidget extends HTMLElement {
 
                 & p#degrees {
                     padding-left: 8px;
-                }
-
-                    
+                }  
             } 
         `
         this.shadowRoot.appendChild(this.weatherDisplay);
@@ -192,23 +214,12 @@ class WeatherWidget extends HTMLElement {
 
     updateContent(data) {
 
-        const dayNameMapping = {
-            'Sunday': 'Sun',
-            'Monday': 'Mon',
-            'Tuesday': 'Tue',
-            'Wednesday': 'Wed',
-            'Thursday': 'Thu',
-            'Friday': 'Fri',
-            'Saturday': 'Sat'
-        };
-
+      
         // Current date
         const currentDate = new Date();
         const options = {  month: 'short', day: '2-digit', year: 'numeric' };
         const formattedDate = currentDate.toLocaleDateString('en-US', options);
         this.date.textContent = formattedDate;
-
-        
 
         // periods is an array of forecasts over a 7 day period
         const weeklyForecast = Array.from(data["periods"]);
@@ -227,24 +238,24 @@ class WeatherWidget extends HTMLElement {
 
 
         // Create the weekly forecast for this week
-        weeklyForecast.forEach((day, index) => {
+        weeklyForecast.forEach((day) => {
 
-            if (index % 2 == 0 && index != 0) {
+            if (this.days.includes(day["name"])) {
 
                 const weekForecastCard = document.createElement('span');
                 const weeklyWeatherIcon = this.renderIcon(day["detailedForecast"]);
                 console.log(day["detailedForecast"])
                 weekForecastCard.innerHTML = `
                     <span id = "weekDayForecastCard">
-                        <p id = "weekDayName">${dayNameMapping[day.name]}</p>
+                        <p id = "weekDayName">${this.dayNameMapping[day["name"]]}</p>
                         <img id = "weeklyWeatherIcon" src = ${weeklyWeatherIcon} alt = "icon of weather condition">
-
                         <p id = "degrees">${day.temperature}°</p>
                         
                     </span> 
-                `
+                `;
                 this.weeklyForecastGrid.appendChild(weekForecastCard)
             }
+            
         })
     }
 

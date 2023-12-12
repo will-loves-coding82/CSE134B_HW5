@@ -9,7 +9,6 @@ class RatingWidget extends HTMLElement {
 
         this.shadowRoot.innerHTML =     `
             <style> 
-                @import './variables.css';
 
                 #jsFormContainer {
                     max-width: 800px;
